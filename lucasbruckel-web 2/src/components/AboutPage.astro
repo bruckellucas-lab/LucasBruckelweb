@@ -1,0 +1,102 @@
+---
+import Base from '../layouts/Base.astro';
+import PhotoSlot from './PhotoSlot.astro';
+import Contact from './Contact.astro';
+import Arrow from './Arrow.astro';
+import { site, type Lang } from '../config/site';
+import { t } from '../i18n/ui';
+import { path, otherLang } from '../i18n/routes';
+import { about, timeline, languages } from '../content/about';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const a = about[lang];
+---
+<Base lang={lang} title={t(lang, 'about.title')} description={`${a.headline} ${a.lead}`} altPath={path(otherLang(lang), 'about')}>
+  <section class="intro wrap">
+    <h1 class="t-monument title">{t(lang, 'about.title')}</h1>
+    <div class="grid intro-grid">
+      <figure class="photo" data-reveal="clip">
+        <PhotoSlot lang={lang} file={site.photos.about} alt="Lucas Bruckel" pending={t(lang, 'about.photo')} ratio="3 / 4" sizes="(max-width: 980px) 80vw, 34vw" priority />
+      </figure>
+      <div class="text">
+        <p class="t-h2 lead">{a.headline}</p>
+        <p class="t-lead">{a.lead}</p>
+        {a.body.map((p) => <p class="body measure">{p}</p>)}
+        <p class="body measure muted">{languages[lang]}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="principles section wrap on-grey" aria-labelledby="how-title">
+    <h2 id="how-title" class="t-display" data-reveal>{t(lang, 'about.how')}</h2>
+    <div class="p-grid">
+      {a.principles.map((p) => (
+        <div class="p" data-reveal>
+          <h3 class="t-h3">{p.title}</h3>
+          <p>{p.body}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="interests section wrap" aria-labelledby="int-title">
+    <div class="grid">
+      <h2 id="int-title" class="t-caption muted int-label">{t(lang, 'about.interests')}</h2>
+      <p class="t-h2 int-text" data-reveal>{a.interests}</p>
+    </div>
+  </section>
+
+  <section class="path section wrap" aria-labelledby="path-title">
+    <h2 id="path-title" class="t-display" data-reveal>{t(lang, 'about.path')}</h2>
+    <ol class="timeline">
+      {timeline.map((i) => (
+        <li class:list={['tl', { hl: 'highlight' in i && i.highlight }]} data-reveal>
+          <p class="t-caption muted date">{i.date[lang]}</p>
+          <div>
+            <h3 class="t-h3">{i.title[lang]}</h3>
+            <p class="muted org">{i.org[lang]}</p>
+            <p class="tl-body">{i.body[lang]}</p>
+            {i.links.length > 0 && (
+              <p class="tl-links">
+                {i.links.map((l) => <a class="link" href={l.url} target="_blank" rel="noopener">{l.label[lang]}<Arrow dir="up-right" /></a>)}
+              </p>
+            )}
+          </div>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <Contact lang={lang} />
+</Base>
+
+<style>
+  .intro { padding-top: clamp(120px, 16vh, 180px); padding-bottom: var(--section); }
+  .title { font-size: clamp(4rem, 17vw, 17rem); margin-left: -0.04em; }
+  .intro-grid { margin-top: var(--s-8); align-items: start; }
+  .photo { grid-column: 1 / span 5; }
+  .text { grid-column: 7 / span 6; display: grid; gap: var(--s-5); }
+  .lead { font-size: clamp(2.75rem, 5vw, 5rem); }
+  .body { font-size: 1.125rem; }
+  .p-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-8) var(--gutter); margin-top: var(--s-8); }
+  .p { border-top: 2px solid var(--black); padding-top: var(--s-5); }
+  .p p { margin-top: var(--s-4); max-width: 40ch; font-size: 1.125rem; }
+  .int-label { grid-column: 1 / span 3; padding-top: 0.8em; }
+  .int-text { grid-column: 4 / span 9; }
+  .timeline { list-style: none; margin-top: var(--s-8); border-top: 2px solid var(--black); }
+  .tl { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 9fr); gap: var(--s-3) var(--gutter); padding-block: var(--s-7); border-bottom: 1px solid var(--line); }
+  .date { padding-top: 0.5em; }
+  .org { margin-top: var(--s-2); }
+  .tl-body { margin-top: var(--s-4); max-width: 46rem; font-size: 1.0625rem; }
+  .tl-links { margin-top: var(--s-4); display: flex; flex-wrap: wrap; gap: 8px 24px; }
+  .tl-links a { display: inline-flex; align-items: center; gap: 6px; }
+  .hl h3 { text-decoration: underline; text-decoration-thickness: 3px; text-underline-offset: 0.18em; }
+  @media (max-width: 980px) {
+    .photo { grid-column: 1 / span 9; }
+    .text { grid-column: 1 / -1; margin-top: var(--s-7); }
+    .p-grid { grid-template-columns: 1fr; }
+    .int-label, .int-text { grid-column: 1 / -1; }
+    .tl { grid-template-columns: 1fr; }
+  }
+</style>

@@ -1,0 +1,66 @@
+---
+import type { Lang } from '../config/site';
+import { t } from '../i18n/ui';
+import { path, otherLang, htmlLang } from '../i18n/routes';
+
+interface Props { lang: Lang; altPath: string; hasWriting: boolean }
+const { lang, altPath, hasWriting } = Astro.props;
+const home = path(lang, 'home');
+---
+<header class="site-header">
+  <a class="brand" href={home} aria-label={t(lang, 'nav.home')}>
+    <span class="mark" aria-hidden="true">LB</span>
+    <span class="brand-name">Lucas Bruckel</span>
+  </a>
+  <nav aria-label="Principal">
+    <ul>
+      <li><a href={`${home}#trabajo`}>{t(lang, 'nav.work')}</a></li>
+      <li><a href={path(lang, 'about')}>{t(lang, 'nav.about')}</a></li>
+      {hasWriting && <li><a href={path(lang, 'writing')}>{t(lang, 'nav.writing')}</a></li>}
+      <li><a href={`${home}#contacto`}>{t(lang, 'nav.contact')}</a></li>
+      <li>
+        <a class="lang" href={altPath} hreflang={htmlLang[otherLang(lang)]} lang={htmlLang[otherLang(lang)]}>
+          <span aria-hidden="true">{t(lang, 'nav.langShort')}</span>
+          <span class="visually-hidden">{t(lang, 'nav.lang')}</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+<style>
+  /* El header usa mix-blend-mode: difference, así se lee igual sobre blanco y sobre negro. */
+  .site-header {
+    position: fixed; inset: 0 0 auto 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 22px var(--margin);
+    color: #fff; mix-blend-mode: difference;
+    pointer-events: none;
+  }
+  .site-header a { pointer-events: auto; text-decoration: none; }
+  .brand { display: inline-flex; align-items: center; gap: 12px; font-weight: 650; }
+  .mark {
+    display: inline-grid; place-items: center; width: 36px; height: 36px;
+    border: 2px solid currentColor; font-weight: 900; font-stretch: 70%; font-size: 15px; letter-spacing: 0.02em;
+  }
+  .brand-name { font-size: 15px; }
+  ul { list-style: none; display: flex; align-items: center; gap: clamp(16px, 2.4vw, 32px); }
+  nav a {
+    font-size: 15px; font-weight: 550; position: relative; padding-block: 6px;
+  }
+  nav a::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: currentColor;
+    transform: scaleX(0); transform-origin: right; transition: transform var(--dur-2) var(--ease-out);
+  }
+  nav a:hover::after, nav a:focus-visible::after { transform: scaleX(1); transform-origin: left; }
+  .lang { border: 2px solid currentColor; padding: 4px 9px !important; font-weight: 700; font-stretch: 90%; }
+  .lang::after { display: none; }
+  @media (max-width: 720px) {
+    .brand-name { display: none; }
+    ul { gap: 14px; }
+    nav a { font-size: 14px; }
+  }
+  @media (max-width: 420px) {
+    li:nth-child(2) { display: none; }
+  }
+</style>

@@ -1,0 +1,36 @@
+---
+import type { Lang } from '../config/site';
+import { t } from '../i18n/ui';
+import { path } from '../i18n/routes';
+import { getNow, formatDate } from '../lib/content';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const { items, updated } = await getNow();
+---
+<section class="now section wrap" aria-labelledby="now-title">
+  <div class="grid">
+    <div class="head" data-reveal>
+      <h2 id="now-title" class="t-display">{t(lang, 'now.title')}</h2>
+      {updated && <p class="t-caption muted date">{t(lang, 'now.updated')} {formatDate(updated, lang)}</p>}
+    </div>
+    <ol class="list" data-reveal>
+      {items.map((i) => (
+        <li>
+          <p>{i.data.text[lang]}</p>
+          {i.data.project && <a class="link t-caption" href={path(lang, 'work', i.data.project)}>{t(lang, 'now.see')}</a>}
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+<style>
+  .head { grid-column: 1 / span 5; }
+  .date { margin-top: var(--s-5); }
+  .list { grid-column: 7 / span 6; list-style: none; border-top: 2px solid var(--black); }
+  .list li { display: flex; justify-content: space-between; align-items: baseline; gap: var(--s-5); padding: var(--s-5) 0; border-bottom: 1px solid var(--line); }
+  .list p { font-size: clamp(1.125rem, 1.5vw, 1.375rem); line-height: 1.4; max-width: 34ch; }
+  .list a { white-space: nowrap; }
+  @media (max-width: 980px) { .head, .list { grid-column: 1 / -1; } .list { margin-top: var(--s-7); } }
+  @media (max-width: 560px) { .list li { flex-direction: column; gap: var(--s-2); } }
+</style>

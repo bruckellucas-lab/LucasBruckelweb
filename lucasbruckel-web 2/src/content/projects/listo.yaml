@@ -1,0 +1,137 @@
+# Fuentes: README y docs del repo Listo.HTML, hoja de ruta (Drive, 14/10/2026),
+# suite de pruebas corrida el 21/11/2026 y sitio online.
+slug: listo
+order: 1
+featured: true
+layout: cinema
+status: beta
+year: 2026
+cover: portada.jpg
+coverAlt:
+  es: "Portada de LISTO: la palabra LISTO en tipografía gigante sobre la foto de un restaurante, con el eslogan y un campo para contar el plan."
+  en: "LISTO homepage: the word LISTO in huge type over a restaurant photo, with the tagline and a field to describe your plan."
+gallery:
+  - src: como-funciona.jpg
+    after: process
+    alt:
+      es: "Sección Cómo funciona de LISTO: 'Decilo. LISTO lo arma.' junto a la foto de un plato en una mesa."
+      en: "LISTO's How it works section: 'Decilo. LISTO lo arma.' ('Say it. LISTO puts it together.') next to a photo of a plated dish."
+    caption:
+      es: "Sitio online, noviembre de 2026."
+      en: "Live site, November 2026."
+links:
+  - kind: live
+    url: https://listohtml.vercel.app/
+  - kind: code
+    url: https://github.com/bruckellucas-lab/Listo.HTML
+stack: [JavaScript, HTML/CSS, Vercel Functions, Supabase, Google Places API, Cloudflare Turnstile, Resend, GitHub Actions]
+facts:
+  - value: { es: "350", en: "350" }
+    label: { es: "Pruebas automáticas", en: "Automated tests" }
+  - value: { es: "12", en: "12" }
+    label: { es: "Funciones en Vercel", en: "Vercel functions" }
+  - value: { es: "3", en: "3" }
+    label: { es: "Lugares reales por pedido", en: "Real venues per request" }
+factsNote:
+  es: "Pruebas corridas el 21 de noviembre de 2026: 347 pasan, 3 omitidas, 0 fallan."
+  en: "Tests run on November 21, 2026: 347 pass, 3 skipped, 0 fail."
+
+es:
+  title: LISTO
+  kicker: Producto propio
+  summary: "Contás tu plan en tus palabras y LISTO lo convierte en tres opciones de lugares reales en Buenos Aires."
+  role: "Creador del producto: diseño, desarrollo asistido por IA, operación de la beta y hoja de ruta."
+  context: "LISTO es un proyecto propio que empezó en 2026. La idea: que organizar una salida en grupo sea tan simple como contarla."
+  problem: "Organizar una cena, un cumpleaños o una juntada obliga a buscar lugares, comparar opciones y coordinar con el grupo y con el lugar, casi todo a mano."
+  goals:
+    - "Entender un pedido escrito en lenguaje natural: qué se quiere hacer, para cuántos, dónde y con qué presupuesto."
+    - "Mostrar tres opciones concretas en vez de una lista interminable."
+    - "Abrir una beta cerrada segura antes de automatizar reservas o cobros."
+  process:
+    - "Tres pantallas: inicio, «esto entendimos» (donde se corrige cada dato) y opciones."
+    - "Búsqueda de lugares con Google Places desde funciones en Vercel, sin exponer claves en el navegador."
+    - "Base de datos en Supabase para pedidos, proveedores, propuestas y reservas."
+    - "Etapa de seguridad y cumplimiento antes de abrir: reglas de Google, permisos, privacidad y límites de costo."
+    - "Medición del matching con escenarios sintéticos y correcciones por etapas."
+    - "Beta cerrada con testers invitados, formulario de feedback y operación manual."
+  decisions:
+    - title: "El navegador nunca toca la base"
+      body: "Todo pasa por funciones del servidor. La web no tiene ninguna clave de Supabase ni de Google."
+    - title: "Beta manual antes que automática"
+      body: "En la beta, LISTO coordina a mano: no reserva, no cobra y no confirma precios ni disponibilidad. Primero hay que validar con proveedores reales."
+    - title: "Privacidad por defecto"
+      body: "El límite de pedidos usa una huella cifrada (HMAC) en lugar de guardar la IP, y el texto que se comparte por WhatsApp es genérico."
+  challenges:
+    - title: "El límite de 12 funciones"
+      body: "El plan gratuito de Vercel admite como máximo 12 funciones. Hubo que eliminar las de prueba y agregar un control que falla si se pasa el límite."
+    - title: "Las reglas de Google Places"
+      body: "Las fotos de Google no se pueden guardar. Se muestran con links firmados que vencen y en la base solo queda el identificador de cada lugar."
+    - title: "Entender lo que la gente escribe"
+      body: "El diagnóstico mostró que la misma cena podía clasificarse distinto según la redacción. El arreglo protege las cenas de 1 a 14 personas y distingue cuando alguien pide un salón y cuando dice que no lo quiere."
+    - title: "Controlar el costo"
+      body: "Cada búsqueda en Google cuesta. Se pusieron límites por visitante y topes totales por hora y por día."
+  solution: "Una web de tres pasos (decilo, ajustalo, elegí) con un backend en Vercel y Supabase, y un panel interno para gestionar pedidos, armar propuestas privadas para cada usuario y registrar reservas y comisiones."
+  results:
+    - "Beta cerrada online en listohtml.vercel.app."
+    - "350 pruebas automáticas que GitHub vuelve a correr en cada cambio."
+    - "Matching medido con escenarios reproducibles: 55 % de opciones pertinentes en la primera línea base (20 escenarios) y 62 % en la medición actual, con un set ampliado de 29 escenarios. El objetivo todavía no se alcanzó."
+    - "Código público en GitHub."
+  learnings:
+    - "Medir antes de corregir: la línea base mostró que el problema no era la zona (95 % de acierto) sino el tipo de lugar."
+    - "La seguridad y los topes de costo se definen antes de abrir la beta, no después."
+    - "Coordinar a mano durante la beta permite validar con proveedores reales antes de automatizar reservas y cobros."
+  next:
+    - "Un centro de operaciones dentro del panel para dejar de duplicar datos en Excel."
+    - "Proveedores piloto, con verificación y contacto real."
+    - "Que el presupuesto filtre por precios verificables."
+    - "Validar el modelo de comisión antes del lanzamiento."
+
+en:
+  title: LISTO
+  kicker: My own product
+  summary: "Describe your plan in your own words and LISTO turns it into three real venue options in Buenos Aires."
+  role: "Product creator: design, AI-assisted development, beta operations and roadmap."
+  context: "LISTO is my own project, started in 2026. The idea: planning a group outing should be as simple as describing it."
+  problem: "Organizing a dinner, a birthday or a get-together means searching for places, comparing options and coordinating with the group and the venue, mostly by hand."
+  goals:
+    - "Understand a request written in plain language: what, for how many people, where and on what budget."
+    - "Show three concrete options instead of an endless list."
+    - "Open a secure private beta before automating bookings or payments."
+  process:
+    - "Three screens: home, “here’s what we understood” (where every detail can be edited) and options."
+    - "Venue search with Google Places from Vercel functions, with no keys exposed in the browser."
+    - "A Supabase database for requests, providers, proposals and bookings."
+    - "A security and compliance phase before opening: Google rules, permissions, privacy and cost limits."
+    - "Measuring the matching with synthetic scenarios and fixing it in stages."
+    - "A private beta with invited testers, a feedback form and manual operations."
+  decisions:
+    - title: "The browser never touches the database"
+      body: "Everything goes through server functions. The website holds no Supabase or Google keys."
+    - title: "Manual beta before automation"
+      body: "During the beta, LISTO coordinates by hand: no bookings, no payments, no automatic confirmation of prices or availability. Real providers come first."
+    - title: "Privacy by default"
+      body: "Rate limiting uses an HMAC fingerprint instead of storing IP addresses, and the text shared over WhatsApp is generic."
+  challenges:
+    - title: "The 12-function limit"
+      body: "Vercel’s free plan allows at most 12 functions. Test functions were removed and a check now fails the build if the limit is exceeded."
+    - title: "Google Places rules"
+      body: "Google photos can’t be stored. They are served through signed links that expire, and only each place’s ID is kept in the database."
+    - title: "Understanding what people write"
+      body: "The diagnosis showed the same dinner could be classified differently depending on wording. The fix protects dinners for 1 to 14 people and tells apart asking for a venue hall from saying you don’t want one."
+    - title: "Keeping costs under control"
+      body: "Every Google search costs money. There are per-visitor limits and hourly and daily caps."
+  solution: "A three-step web app (say it, adjust it, pick one) backed by Vercel and Supabase, plus an internal panel to manage requests, build a private proposal for each user and track bookings and commissions."
+  results:
+    - "Private beta live at listohtml.vercel.app."
+    - "350 automated tests that GitHub runs again on every change."
+    - "Matching measured with reproducible scenarios: 55% relevant options in the first baseline (20 scenarios) and 62% in the current run, with an expanded set of 29 scenarios. The target hasn’t been reached yet."
+    - "Public source code on GitHub."
+  learnings:
+    - "Measure before fixing: the baseline showed the issue wasn’t location (95% accurate) but the type of venue."
+    - "Security and cost caps get defined before opening a beta, not after."
+    - "Coordinating by hand during the beta makes it possible to validate with real providers before automating bookings and payments."
+  next:
+    - "An operations center inside the panel, so data stops being duplicated in Excel."
+    - "Pilot providers, verified and actually contacted."
+    - "Budget filtering based on verifiable prices."
+    - "Validating the commission model before launch."

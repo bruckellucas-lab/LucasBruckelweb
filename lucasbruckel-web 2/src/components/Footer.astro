@@ -1,0 +1,21 @@
+---
+import { site, type Lang } from '../config/site';
+import { t } from '../i18n/ui';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+---
+<footer class="site-footer on-dark">
+  <div class="wrap row">
+    <span>{site.name}, {site.location[lang]}</span>
+    <span class="links">
+      <a class="link" href={site.links.linkedin} rel="noopener" target="_blank">LinkedIn</a>
+      <a class="link" href={site.links.github} rel="noopener" target="_blank">GitHub</a>
+    </span>
+    <span class="muted">{t(lang, 'footer.updated')}</span>
+  </div>
+</footer>
+<style>
+  .site-footer { font-size: var(--fs-small); }
+  .row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 24px; padding-block: 28px; border-top: 1px solid var(--line-dark); }
+  .links { display: flex; gap: 20px; }
+</style>

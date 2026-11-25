@@ -1,0 +1,149 @@
+---
+import { Image } from 'astro:assets';
+import Status from './Status.astro';
+import type { Lang } from '../config/site';
+import { t } from '../i18n/ui';
+import { path } from '../i18n/routes';
+import { projectImage } from '../lib/images';
+import type { Project } from '../lib/content';
+
+interface Props { lang: Lang; project: Project }
+const { lang, project } = Astro.props;
+const d = project.data;
+const c = d[lang];
+const href = path(lang, 'work', d.slug);
+const cover = projectImage(d.slug, d.cover);
+const secondary = d.secondary ? projectImage(d.slug, d.secondary) : null;
+const vt = `view-transition-name: title-${d.slug}`;
+---
+{d.layout === 'cinema' && (
+  <article class="item cinema on-dark" aria-labelledby={`w-${d.slug}`}>
+    <div class="cinema-grid">
+      <div class="cinema-text" data-reveal>
+        <p class="meta t-caption"><Status lang={lang} status={d.status} /><span>{c.kicker}, {d.year}</span></p>
+        <h3 id={`w-${d.slug}`} class="cinema-title t-display" style={vt}>{c.title}</h3>
+        <p class="t-lead summary">{c.summary}</p>
+        <a class="btn btn--solid" href={href}>{t(lang, 'work.open')}</a>
+      </div>
+      <a class="cinema-media reveal-color" href={href} tabindex="-1" aria-hidden="true" data-reveal="clip">
+        <Image src={cover} alt="" widths={[640, 960, 1400]} sizes="(max-width: 980px) 100vw, 58vw" />
+      </a>
+    </div>
+    {d.facts.length > 0 && (
+      <dl class="facts">
+        {d.facts.map((f) => (
+          <div><dt class="t-caption">{f.label[lang]}</dt><dd>{f.value[lang]}</dd></div>
+        ))}
+      </dl>
+    )}
+  </article>
+)}
+
+{d.layout === 'split' && (
+  <article class="item split" aria-labelledby={`w-${d.slug}`}>
+    <div class="split-media reveal-color" data-reveal>
+      <a href={href} tabindex="-1" aria-hidden="true" class="split-main">
+        <Image src={cover} alt="" widths={[640, 960, 1400]} sizes="(max-width: 980px) 92vw, 52vw" />
+      </a>
+      {secondary && (
+        <a href={href} tabindex="-1" aria-hidden="true" class="split-phone">
+          <Image src={secondary} alt="" widths={[320, 520]} sizes="(max-width: 980px) 38vw, 16vw" />
+        </a>
+      )}
+    </div>
+    <div class="split-text" data-reveal>
+      <p class="meta t-caption"><Status lang={lang} status={d.status} /><span>{c.kicker}, {d.year}</span></p>
+      <h3 id={`w-${d.slug}`} class="t-h2" style={vt}>{c.title}</h3>
+      <p class="t-lead summary">{c.summary}</p>
+      {d.facts.length > 0 && (
+        <dl class="facts facts--light">
+          {d.facts.map((f) => (
+            <div><dt class="t-caption">{f.label[lang]}</dt><dd>{f.value[lang]}</dd></div>
+          ))}
+        </dl>
+      )}
+      <a class="btn" href={href}>{t(lang, 'work.open')}</a>
+    </div>
+  </article>
+)}
+
+{d.layout === 'frame' && (
+  <article class="item frame on-grey" aria-labelledby={`w-${d.slug}`}>
+    <a class="frame-media reveal-color" href={href} tabindex="-1" aria-hidden="true" data-reveal="clip">
+      <Image src={cover} alt="" widths={[640, 960, 1400, 1800]} sizes="(max-width: 980px) 100vw, 86vw" />
+    </a>
+    <div class="frame-text" data-reveal>
+      <div>
+        <p class="meta t-caption"><Status lang={lang} status={d.status} /><span>{c.kicker}, {d.year}</span></p>
+        <h3 id={`w-${d.slug}`} class="t-h2" style={vt}>{c.title}</h3>
+      </div>
+      <p class="t-lead summary">{c.summary}</p>
+      <a class="btn" href={href}>{t(lang, 'work.open')}</a>
+    </div>
+  </article>
+)}
+
+<style>
+  .item { position: relative; }
+  .meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 18px; margin-bottom: var(--s-5); }
+  .summary { margin-top: var(--s-5); max-width: 30ch; }
+  .btn { margin-top: var(--s-7); }
+
+  /* --- cinema: banda negra a sangre, título monumental, captura grande --- */
+  .cinema { padding: var(--section) var(--margin) var(--s-8); }
+  .cinema-grid {
+    display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: var(--s-8) var(--gutter); align-items: end;
+  }
+  .cinema-title { font-size: clamp(5rem, 15vw, 15rem); line-height: 0.8; margin-left: -0.04em; }
+  .cinema-media { display: block; margin-right: calc(var(--margin) * -1); }
+  .cinema-media :global(img) { width: 100%; height: auto; }
+  .cinema .summary { color: var(--white); }
+
+  .facts {
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin-top: var(--s-9); border-top: 1px solid var(--line-dark);
+  }
+  .facts div { padding: var(--s-5) var(--s-5) 0 0; }
+  .facts div + div { padding-left: var(--s-5); border-left: 1px solid var(--line-dark); }
+  .facts dt { color: var(--muted-dark); }
+  .facts dd { font-size: clamp(2.5rem, 5vw, 4.5rem); font-weight: 860; font-stretch: 66%; line-height: 1; margin-top: var(--s-2); }
+
+  .facts--light { margin-top: var(--s-7); grid-template-columns: 1fr; border-top-color: var(--black); }
+  .facts--light div, .facts--light div + div { padding: 14px 0; border-left: 0; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }
+  .facts--light dt { color: var(--muted); order: 2; text-align: right; }
+  .facts--light dd { font-size: 1.75rem; margin: 0; }
+
+  /* --- split: capturas superpuestas (computadora + celular) --- */
+  .split {
+    display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: var(--s-8) var(--gutter); align-items: center;
+    padding: var(--section) var(--margin);
+  }
+  .split-media { position: relative; padding-bottom: 12%; padding-right: 6%; }
+  .split-text { position: relative; z-index: 4; }
+  .split-main { display: block; border: 1px solid var(--line); }
+  .split-phone {
+    position: absolute; right: 3%; bottom: 0; width: 28%; z-index: 3;
+    border: 6px solid var(--black); border-radius: 22px; overflow: hidden; background: var(--black);
+    box-shadow: 0 30px 60px -30px rgba(0,0,0,0.5);
+  }
+
+  /* --- frame: captura enmarcada a lo ancho sobre banda gris --- */
+  .frame { padding: var(--section) var(--margin); }
+  .frame-media { display: block; }
+  .frame-text {
+    display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 4fr) auto;
+    gap: var(--s-6) var(--gutter); align-items: end; margin-top: var(--s-7);
+  }
+  .frame-text .summary, .frame-text .btn { margin-top: 0; }
+
+  @media (max-width: 980px) {
+    .cinema-grid, .split, .frame-text { grid-template-columns: 1fr; }
+    .cinema-media { margin-right: 0; order: -1; }
+    .split-text { order: 2; }
+    .facts { grid-template-columns: 1fr; }
+    .facts div + div { padding-left: 0; border-left: 0; border-top: 1px solid var(--line-dark); }
+    .facts div { padding: var(--s-4) 0; }
+  }
+</style>

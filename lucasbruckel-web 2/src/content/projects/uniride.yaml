@@ -1,0 +1,94 @@
+# Fuente: pitch "UniRide — Pitch" (Google Slides, Drive). Proyecto en equipo.
+# PENDIENTE: confirmar el rol de Lucas, el equipo y el link a la demo en vivo.
+slug: uniride
+order: 3
+featured: true
+layout: frame
+status: prototype
+year: 2026
+cover: portada.png
+coverAlt:
+  es: "Slide del pitch de UniRide: el prototipo funcional en una computadora y un celular, con la búsqueda de viajes y el detalle de un conductor."
+  en: "UniRide pitch slide: the working prototype on a laptop and a phone, showing ride search and a driver’s details."
+gallery:
+  - src: confianza.png
+    after: decisions
+    alt:
+      es: "Slide de confianza y seguridad: chat interno y credencial de estudiante verificado en dos celulares."
+      en: "Trust and safety slide: in-app chat and a verified student ID on two phones."
+    caption:
+      es: "Del pitch: la confianza como diferencial."
+      en: "From the pitch: trust as the differentiator."
+links: []
+stack: [Prototipo web]
+facts:
+  - value: { es: "90 → 30 min", en: "90 → 30 min" }
+    label: { es: "Ejemplo del pitch: transporte público contra auto", en: "Pitch example: public transport vs. car" }
+  - value: { es: "3 pasos", en: "3 steps" }
+    label: { es: "Verificarse, buscar, compartir", en: "Get verified, search, share" }
+
+es:
+  title: UniRide
+  kicker: Proyecto en equipo
+  summary: "Una comunidad para que estudiantes universitarios del AMBA compartan el viaje a la facultad."
+  role: null
+  context: "Un proyecto en equipo presentado como pitch, con un prototipo web funcional y una demo en vivo."
+  problem: "Ir a la facultad puede llevar mucho tiempo: el pitch toma como ejemplo un trayecto de 90 minutos en transporte público contra 30 en auto, mientras muchos autos van con una o dos personas."
+  goals:
+    - "Conectar a estudiantes que hacen recorridos parecidos."
+    - "Que viajar sea más barato que ir en auto propio o en una app de viajes, y más cómodo que el transporte público."
+    - "Que la confianza venga de viajar con otros estudiantes verificados."
+  process:
+    - "Problema: viajes largos y asientos vacíos."
+    - "Insight: los estudiantes ya comparten viajes con amigos y compañeros; falta una forma simple y organizada de hacerlo."
+    - "Producto: verificación con el mail de la facultad, búsqueda de rutas parecidas y precio por asiento."
+    - "Prototipo funcional y pitch con demo en vivo."
+  decisions:
+    - title: "Verificación con el mail de la facultad"
+      body: "Solo entran estudiantes universitarios, y eso es la base de la confianza."
+    - title: "Precio por asiento"
+      body: "Cada viaje se comparte y se paga por lugar."
+    - title: "Plataforma, no empresa de transporte"
+      body: "UniRide arma la tecnología y la comunidad; los viajes los hacen los propios estudiantes."
+  challenges:
+    - title: "El efecto red"
+      body: "Más estudiantes generan más rutas, y más rutas hacen más fácil encontrar viaje. El desafío es llegar a ese punto."
+  solution: "Una comunidad de movilidad universitaria con estudiantes verificados, perfiles con calificaciones y chat interno."
+  results:
+    - "Prototipo web funcional, mostrado con una demo en vivo durante el pitch."
+  learnings: []
+  next:
+    - "La visión del pitch: ser la comunidad de carpooling universitario de referencia en el AMBA."
+
+en:
+  title: UniRide
+  kicker: Team project
+  summary: "A community where university students in Greater Buenos Aires share the ride to campus."
+  role: null
+  context: "A team project presented as a pitch, with a working web prototype and a live demo."
+  problem: "Getting to campus can take a long time: the pitch uses the example of a 90-minute trip by public transport versus 30 by car, while many cars carry only one or two people."
+  goals:
+    - "Connect students who travel similar routes."
+    - "Make the trip cheaper than driving your own car or using a ride-hailing app, and more comfortable than public transport."
+    - "Build trust by traveling with other verified students."
+  process:
+    - "Problem: long commutes and empty seats."
+    - "Insight: students already share rides with friends and classmates; what’s missing is a simple, organized way to do it."
+    - "Product: verification with a university email, matching similar routes and price per seat."
+    - "Working prototype and a pitch with a live demo."
+  decisions:
+    - title: "University email verification"
+      body: "Only university students can join, and that is the foundation of trust."
+    - title: "Price per seat"
+      body: "Each ride is shared and paid per seat."
+    - title: "A platform, not a transport company"
+      body: "UniRide builds the technology and the community; students make the trips themselves."
+  challenges:
+    - title: "Network effects"
+      body: "More students create more routes, and more routes make finding a ride easier. The challenge is reaching that point."
+  solution: "A university mobility community with verified students, rated profiles and in-app chat."
+  results:
+    - "Working web prototype, shown in a live demo during the pitch."
+  learnings: []
+  next:
+    - "The pitch’s vision: becoming the go-to university carpooling community in Greater Buenos Aires."

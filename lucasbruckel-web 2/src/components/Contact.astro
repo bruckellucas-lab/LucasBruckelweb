@@ -1,0 +1,45 @@
+---
+import ContactForm from './ContactForm.astro';
+import { site, type Lang } from '../config/site';
+import { t } from '../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+---
+<section id="contacto" class="contact on-dark" aria-labelledby="contact-title">
+  <div class="wrap inner">
+    <h2 id="contact-title" class="t-monument title" data-reveal>{t(lang, 'contact.title')}</h2>
+    <div class="grid body">
+      <div class="direct" data-reveal>
+        <p class="t-lead muted lede">{t(lang, 'contact.lede')}</p>
+        <a class="email" href={`mailto:${site.email}`}>{site.email}</a>
+        <div class="actions">
+          <button class="btn" type="button" data-copy={site.email} data-done={t(lang, 'contact.copied')}>
+            <span data-label>{t(lang, 'contact.copy')}</span>
+          </button>
+          <a class="btn" href={site.links.linkedin} target="_blank" rel="noopener">LinkedIn</a>
+          <a class="btn" href={site.links.github} target="_blank" rel="noopener">GitHub</a>
+          {site.cv && <a class="btn" href={site.cv} download>{t(lang, 'contact.cv')}</a>}
+        </div>
+      </div>
+      <div class="form" data-reveal>
+        <ContactForm lang={lang} />
+      </div>
+    </div>
+  </div>
+</section>
+<style>
+  .contact { padding-block: var(--section) var(--s-9); }
+  .title { font-size: clamp(4.5rem, 17vw, 17rem); margin-left: -0.03em; }
+  .body { margin-top: var(--s-9); row-gap: var(--s-8); }
+  .direct { grid-column: 1 / span 6; }
+  .form { grid-column: 8 / span 5; }
+  .lede { max-width: 26ch; }
+  .email {
+    display: inline-block; margin-top: var(--s-6);
+    font-size: clamp(1.75rem, 3.6vw, 3.25rem); font-weight: 760; font-stretch: 78%; line-height: 1.05;
+    text-decoration: none; border-bottom: 3px solid currentColor; word-break: break-word;
+  }
+  .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: var(--s-7); }
+  @media (max-width: 980px) { .direct, .form { grid-column: 1 / -1; } }
+</style>

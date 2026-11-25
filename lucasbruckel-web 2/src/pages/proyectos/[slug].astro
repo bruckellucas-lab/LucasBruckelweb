@@ -1,0 +1,14 @@
+---
+import CasePage from '../../components/CasePage.astro';
+import { getProjects } from '../../lib/content';
+
+export async function getStaticPaths() {
+  const projects = await getProjects();
+  return projects.map((project, i) => ({
+    params: { slug: project.data.slug },
+    props: { project, next: projects[(i + 1) % projects.length] },
+  }));
+}
+const { project, next } = Astro.props;
+---
+<CasePage lang="es" project={project} next={next} />

@@ -1,0 +1,21 @@
+{
+  "name": "lucasbruckel-web",
+  "type": "module",
+  "private": true,
+  "version": "2.0.0",
+  "description": "Web personal de Lucas Bruckel (Astro + Vercel).",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check:links": "node scripts/check-links.mjs"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.6",
+    "@astrojs/vercel": "^11.0.22",
+    "astro": "^7.4.13"
+  }
+}

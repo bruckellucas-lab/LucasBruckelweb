@@ -1,0 +1,28 @@
+# "Ahora": qué estoy haciendo hoy. Para actualizar, editá los textos y la fecha.
+# Se muestra la fecha más reciente como "Actualizado el ...".
+- id: listo
+  order: 1
+  updated: 2026-11-21
+  project: listo
+  text:
+    es: "LISTO sigue en beta cerrada con testers invitados. Lo próximo es el centro de operaciones del panel."
+    en: "LISTO is still in private beta with invited testers. Next up: the operations center in the admin panel."
+- id: catalogos
+  order: 2
+  updated: 2026-11-21
+  project: catalogos
+  text:
+    es: "Buscando el primer comercio para publicar su catálogo web."
+    en: "Looking for the first store to publish its web catalog."
+- id: portfolio
+  order: 3
+  updated: 2026-11-21
+  text:
+    es: "Este sitio: armado y en revisión antes de publicarlo."
+    en: "This site: built and under review before going live."
+- id: ort
+  order: 4
+  updated: 2026-11-21
+  text:
+    es: "Terminando el secundario técnico en Gestión en ORT."
+    en: "Finishing my technical high school degree in Management at ORT."

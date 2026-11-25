@@ -1,0 +1,209 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import Status from './Status.astro';
+import Arrow from './Arrow.astro';
+import type { Lang } from '../config/site';
+import { t, type UIKey } from '../i18n/ui';
+import { path, otherLang } from '../i18n/routes';
+import { projectImage } from '../lib/images';
+import type { Project } from '../lib/content';
+
+interface Props { lang: Lang; project: Project; next: Project }
+const { lang, project, next } = Astro.props;
+const d = project.data;
+const c = d[lang];
+const cover = projectImage(d.slug, d.cover);
+const pageUrl = new URL(path(lang, 'work', d.slug), Astro.site).toString();
+const shareText = `${c.title}: ${c.summary}`;
+const ogImage = `/og/${d.slug}${lang === 'en' ? '-en' : ''}.png`;
+
+type Block = { id: string; label: UIKey; kind: 'text' | 'list' | 'steps' | 'cards'; value: unknown };
+const blocks: Block[] = [
+  { id: 'context', label: 'case.context', kind: 'text', value: c.context },
+  { id: 'problem', label: 'case.problem', kind: 'text', value: c.problem },
+  { id: 'goals', label: 'case.goals', kind: 'list', value: c.goals },
+  { id: 'process', label: 'case.process', kind: 'steps', value: c.process },
+  { id: 'decisions', label: 'case.decisions', kind: 'cards', value: c.decisions },
+  { id: 'challenges', label: 'case.challenges', kind: 'cards', value: c.challenges },
+  { id: 'solution', label: 'case.solution', kind: 'text', value: c.solution },
+  { id: 'results', label: 'case.results', kind: 'list', value: c.results },
+  { id: 'learnings', label: 'case.learnings', kind: 'list', value: c.learnings },
+  { id: 'next', label: 'case.next', kind: 'list', value: c.next },
+].filter((b) => (Array.isArray(b.value) ? b.value.length > 0 : Boolean(b.value))) as Block[];
+
+const galleryAfter = (id: string) => d.gallery.filter((g) => g.after === id);
+const linkLabel = { live: t(lang, 'link.live'), demo: t(lang, 'link.demo'), code: t(lang, 'link.code') };
+---
+<Base
+  lang={lang}
+  title={c.title}
+  description={c.summary}
+  ogImage={ogImage}
+  altPath={path(otherLang(lang), 'work', d.slug)}
+  type="article"
+>
+  <article class="case">
+    <header class="case-head wrap">
+      <a class="back link t-caption" href={`${path(lang, 'home')}#trabajo`}>{t(lang, 'case.back')}</a>
+      <p class="meta t-caption"><Status lang={lang} status={d.status} /><span>{c.kicker}, {d.year}</span></p>
+      <h1 class="t-monument title" style={`view-transition-name: title-${d.slug}`}>{c.title}</h1>
+      <p class="t-lead summary">{c.summary}</p>
+
+      <dl class="facts-meta">
+        <div>
+          <dt class="t-caption muted">{t(lang, 'work.role')}</dt>
+          <dd>{c.role ?? <span class="pending">{t(lang, 'case.pending')}</span>}</dd>
+        </div>
+        <div>
+          <dt class="t-caption muted">{t(lang, 'work.status')}</dt>
+          <dd><Status lang={lang} status={d.status} /></dd>
+        </div>
+        <div>
+          <dt class="t-caption muted">{t(lang, 'work.stack')}</dt>
+          <dd>{d.stack.join(', ')}</dd>
+        </div>
+        <div>
+          <dt class="t-caption muted">{t(lang, 'work.links')}</dt>
+          <dd class="links">
+            {d.links.length > 0 ? d.links.map((l) => (
+              <a class="link" href={l.url} target="_blank" rel="noopener">{linkLabel[l.kind]}<Arrow dir="up-right" /></a>
+            )) : <span class="pending">{t(lang, 'case.pending')}</span>}
+          </dd>
+        </div>
+      </dl>
+    </header>
+
+    <figure class="cover wrap" data-reveal="clip">
+      <Image src={cover} alt={d.coverAlt[lang]} widths={[640, 1000, 1400, 1800]} sizes="(max-width: 980px) 100vw, 92vw" loading="eager" />
+    </figure>
+
+    {d.facts.length > 0 && (
+      <div class="wrap">
+        <dl class="facts">
+          {d.facts.map((f) => (
+            <div data-reveal><dt class="t-caption muted">{f.label[lang]}</dt><dd>{f.value[lang]}</dd></div>
+          ))}
+        </dl>
+        {d.factsNote && <p class="t-caption muted note">{d.factsNote[lang]}</p>}
+      </div>
+    )}
+
+    <div class="blocks wrap">
+      {blocks.map((b) => (
+        <>
+          <section class="block" aria-labelledby={`b-${b.id}`} data-reveal>
+            <h2 id={`b-${b.id}`} class="block-label t-h3">{t(lang, b.label)}</h2>
+            <div class="block-body">
+              {b.kind === 'text' && <p class="t-lead">{b.value as string}</p>}
+              {b.kind === 'list' && (
+                <ul class="list">{(b.value as string[]).map((x) => <li>{x}</li>)}</ul>
+              )}
+              {b.kind === 'steps' && (
+                <ol class="steps">{(b.value as string[]).map((x) => <li>{x}</li>)}</ol>
+              )}
+              {b.kind === 'cards' && (
+                <div class="cards">
+                  {(b.value as { title: string; body: string }[]).map((x) => (
+                    <div class="card"><h3>{x.title}</h3><p>{x.body}</p></div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </section>
+          {galleryAfter(b.id).map((g) => (
+            <figure class="shot" data-reveal="clip">
+              <Image src={projectImage(d.slug, g.src)} alt={g.alt[lang]} widths={[640, 1000, 1400]} sizes="(max-width: 980px) 100vw, 80vw" />
+              {g.caption && <figcaption class="t-caption muted">{g.caption[lang]}</figcaption>}
+            </figure>
+          ))}
+        </>
+      ))}
+    </div>
+
+    <aside class="share wrap" aria-label={t(lang, 'case.share')}>
+      <p class="t-caption muted">{t(lang, 'case.share')}</p>
+      <div class="share-actions">
+        <button class="btn" type="button" data-copy="url" data-done={t(lang, 'case.copied')}><span data-label>{t(lang, 'case.copy')}</span></button>
+        <a class="btn" href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(pageUrl)}`} target="_blank" rel="noopener">LinkedIn</a>
+        <a class="btn" href={`https://wa.me/?text=${encodeURIComponent(`${shareText} ${pageUrl}`)}`} target="_blank" rel="noopener">WhatsApp</a>
+      </div>
+    </aside>
+
+    <a class="next on-dark" href={path(lang, 'work', next.data.slug)}>
+      <span class="t-caption">{t(lang, 'case.nextProject')}</span>
+      <span class="t-monument next-title">{next.data[lang].title}</span>
+      <Arrow />
+    </a>
+  </article>
+</Base>
+
+<style>
+  .case-head { padding-top: clamp(120px, 16vh, 180px); }
+  .back { display: inline-block; margin-bottom: var(--s-8); }
+  .meta { display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center; }
+  .title { margin-top: var(--s-5); font-size: clamp(4rem, 16vw, 16rem); margin-left: -0.04em; overflow-wrap: anywhere; hyphens: auto; }
+  .summary { margin-top: var(--s-6); max-width: 32ch; }
+  .facts-meta {
+    display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s-5) var(--gutter);
+    margin-top: var(--s-8); padding-top: var(--s-5); border-top: 2px solid var(--black);
+  }
+  .facts-meta dd { margin-top: var(--s-2); font-weight: 520; }
+  .links { display: flex; flex-direction: column; gap: 6px; }
+  .links a { display: inline-flex; align-items: center; gap: 6px; }
+  .pending { display: inline-block; padding: 2px 8px; border: 1.5px dashed currentColor; font-size: var(--fs-small); font-weight: 600; }
+
+  .cover { margin-top: var(--s-8); }
+  .cover :global(img) { width: 100%; height: auto; border: 1px solid var(--line); }
+
+  .facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: var(--s-8); border-top: 1px solid var(--line); }
+  .facts div { padding: var(--s-5) var(--s-5) 0 0; }
+  .facts div + div { padding-left: var(--s-5); border-left: 1px solid var(--line); }
+  .facts dd { font-size: clamp(2.25rem, 4.6vw, 4.25rem); font-weight: 860; font-stretch: 66%; line-height: 1; margin-top: var(--s-2); }
+  .note { margin-top: var(--s-4); }
+
+  .blocks { padding-block: var(--s-9); }
+  .block {
+    display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: var(--s-5) var(--gutter);
+    padding-block: var(--s-8); border-top: 1px solid var(--line);
+  }
+  .block-label { position: sticky; top: 96px; align-self: start; }
+  .block-body { max-width: 46rem; }
+  .list { list-style: none; display: grid; gap: var(--s-4); }
+  .list li { position: relative; padding-left: 28px; font-size: 1.125rem; }
+  .list li::before { content: ""; position: absolute; left: 0; top: 0.75em; width: 14px; height: 2px; background: currentColor; }
+  .steps { list-style: none; counter-reset: s; display: grid; gap: var(--s-4); }
+  .steps li { counter-increment: s; display: grid; grid-template-columns: 56px 1fr; font-size: 1.125rem; padding-bottom: var(--s-4); border-bottom: 1px solid var(--line); }
+  .steps li::before { content: counter(s, decimal-leading-zero); font-weight: 860; font-stretch: 66%; font-size: 1.5rem; line-height: 1.1; }
+  .cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--gutter); }
+  .card { padding: var(--s-5); border: 2px solid var(--black); }
+  .card h3 { font-size: 1.25rem; font-weight: 750; font-stretch: 86%; line-height: 1.2; }
+  .card p { margin-top: var(--s-3); }
+
+  .shot { margin-block: var(--s-6) var(--s-8); }
+  .shot :global(img) { width: 100%; height: auto; border: 1px solid var(--line); }
+  .shot figcaption { margin-top: var(--s-3); }
+
+  .share { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--s-5); padding-block: var(--s-7) var(--s-9); border-top: 2px solid var(--black); }
+  .share-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+
+  .next {
+    display: grid; gap: var(--s-4); padding: var(--section) var(--margin); text-decoration: none;
+    position: relative; overflow: hidden;
+  }
+  .next-title { font-size: clamp(3.5rem, 12vw, 12rem); transition: transform var(--dur-3) var(--ease-out); }
+  .next:hover .next-title, .next:focus-visible .next-title { transform: translateX(2vw); }
+  .next :global(.arrow) { width: clamp(32px, 4vw, 56px); height: auto; }
+
+  @media (max-width: 980px) {
+    .facts-meta { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .block { grid-template-columns: 1fr; }
+    .block-label { position: static; }
+    .cards { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 560px) {
+    .facts-meta, .facts { grid-template-columns: 1fr; }
+    .facts div + div { padding-left: 0; border-left: 0; border-top: 1px solid var(--line); }
+    .facts div { padding: var(--s-4) 0; }
+  }
+</style>

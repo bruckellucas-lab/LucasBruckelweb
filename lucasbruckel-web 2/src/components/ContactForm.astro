@@ -1,0 +1,129 @@
+---
+import { site, type Lang } from '../config/site';
+import { t } from '../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? '';
+const messages = {
+  required: t(lang, 'form.error.required'),
+  email: t(lang, 'form.error.email'),
+  short: t(lang, 'form.error.short'),
+  captcha: t(lang, 'form.error.captcha'),
+  rate: t(lang, 'form.error.rate'),
+  unavailable: `${t(lang, 'form.error.unavailable')} ${site.email}.`,
+  generic: `${t(lang, 'form.error.generic')} ${site.email}.`,
+  sending: t(lang, 'form.sending'),
+  sent: t(lang, 'form.sent'),
+  send: t(lang, 'form.send'),
+};
+---
+<form class="contact-form" method="post" action="/api/contact" novalidate data-messages={JSON.stringify(messages)} data-lang={lang}>
+  <div class="field">
+    <label for="cf-name">{t(lang, 'form.name')}</label>
+    <input id="cf-name" name="name" type="text" autocomplete="name" required maxlength="120" />
+  </div>
+  <div class="field">
+    <label for="cf-email">{t(lang, 'form.email')}</label>
+    <input id="cf-email" name="email" type="email" autocomplete="email" required maxlength="200" />
+  </div>
+  <div class="field">
+    <label for="cf-topic">{t(lang, 'form.topic')}</label>
+    <select id="cf-topic" name="topic">
+      <option value="business">{t(lang, 'form.topic.business')}</option>
+      <option value="company">{t(lang, 'form.topic.company')}</option>
+      <option value="listo">{t(lang, 'form.topic.listo')}</option>
+      <option value="other" selected>{t(lang, 'form.topic.other')}</option>
+    </select>
+  </div>
+  <div class="field">
+    <label for="cf-message">{t(lang, 'form.message')}</label>
+    <textarea id="cf-message" name="message" rows="5" required minlength="10" maxlength="4000"></textarea>
+  </div>
+  <!-- Trampa para bots: las personas no ven este campo. -->
+  <div class="hp" aria-hidden="true">
+    <label for="cf-website">Website</label>
+    <input id="cf-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+  </div>
+  {siteKey && <div class="cf-turnstile" data-sitekey={siteKey} data-action="contact" data-appearance="interaction-only"></div>}
+  <p class="status" role="status" aria-live="polite"></p>
+  <button class="btn btn--solid submit" type="submit">{t(lang, 'form.send')}</button>
+</form>
+{siteKey && <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>}
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('.contact-form');
+  if (form) {
+    const msg = JSON.parse(form.dataset.messages ?? '{}') as Record<string, string>;
+    const status = form.querySelector<HTMLElement>('.status')!;
+    const submit = form.querySelector<HTMLButtonElement>('.submit')!;
+    const say = (text: string, ok = false) => {
+      status.textContent = text;
+      status.dataset.state = ok ? 'ok' : 'error';
+    };
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const data = Object.fromEntries(new FormData(form).entries()) as Record<string, string>;
+      const name = (data.name ?? '').trim();
+      const email = (data.email ?? '').trim();
+      const message = (data.message ?? '').trim();
+
+      if (!name || !email || !message) return say(msg.required);
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return say(msg.email);
+      if (message.length < 10) return say(msg.short);
+
+      submit.disabled = true;
+      submit.textContent = msg.sending;
+      say('');
+      try {
+        const res = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name, email, message,
+            topic: data.topic, website: data.website,
+            token: data['cf-turnstile-response'] ?? '',
+            lang: form.dataset.lang,
+          }),
+        });
+        const body = await res.json().catch(() => ({}));
+        if (res.ok) {
+          form.reset();
+          say(msg.sent, true);
+        } else {
+          const code = (body as { error?: string }).error ?? 'generic';
+          say(msg[code] ?? msg.generic);
+          (window as unknown as { turnstile?: { reset: () => void } }).turnstile?.reset();
+        }
+      } catch {
+        say(msg.generic);
+      } finally {
+        submit.disabled = false;
+        submit.textContent = msg.send;
+      }
+    });
+  }
+</script>
+
+<style>
+  .contact-form { display: grid; gap: var(--s-5); }
+  .field { display: grid; gap: var(--s-2); }
+  label { font-size: var(--fs-small); font-weight: 600; color: var(--muted-dark); }
+  input, select, textarea {
+    width: 100%; padding: 14px 0; background: transparent; color: var(--white);
+    border: 0; border-bottom: 2px solid var(--line-dark); border-radius: 0;
+    font-size: 1.125rem; transition: border-color var(--dur-2) var(--ease-out);
+  }
+  select { appearance: none; background-image: linear-gradient(45deg, transparent 50%, currentColor 50%), linear-gradient(135deg, currentColor 50%, transparent 50%); background-position: calc(100% - 12px) 55%, calc(100% - 6px) 55%; background-size: 6px 6px; background-repeat: no-repeat; }
+  select option { color: var(--black); }
+  textarea { resize: vertical; min-height: 140px; }
+  input:focus, select:focus, textarea:focus { outline: none; border-bottom-color: var(--white); }
+  input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid var(--white); outline-offset: 4px; }
+  .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .status { min-height: 1.6em; font-size: var(--fs-small); }
+  .status[data-state='error'] { color: #ffffff; text-decoration: underline; text-decoration-thickness: 2px; }
+  .status[data-state='ok'] { color: #ffffff; font-weight: 600; }
+  .submit { justify-self: start; }
+  .submit:disabled { opacity: 0.6; cursor: progress; }
+</style>

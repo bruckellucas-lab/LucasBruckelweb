@@ -1,0 +1,134 @@
+# Fuentes: README y docs del repo solucioncomercial (privado), demo online,
+# capturas de la demo local en modo simulación (21/11/2026) y el Acerca de de LinkedIn (NFC).
+slug: catalogos
+order: 2
+featured: true
+layout: split
+status: demo
+year: 2026
+cover: portada.png
+coverAlt:
+  es: "Portada de la demo SHOWROOM DEMO: la palabra SHOWROOM gigante cortada por la foto de una modelo con tapado negro."
+  en: "SHOWROOM DEMO homepage: the word SHOWROOM in huge type, split by a photo of a model in a black coat."
+secondary: panel-celular.png
+secondaryAlt:
+  es: "Panel del comerciante en el celular: lista de productos con precio y un interruptor para mostrar u ocultar cada uno."
+  en: "Merchant panel on a phone: product list with prices and a toggle to show or hide each item."
+gallery:
+  - src: catalogo.png
+    after: solution
+    alt:
+      es: "Catálogo de la demo: productos con foto, código, precio y un botón Consultar que abre WhatsApp."
+      en: "Demo catalog: products with photo, code, price and an Ask button that opens WhatsApp."
+    caption:
+      es: "Cada producto termina en una consulta por WhatsApp con el mensaje ya armado."
+      en: "Every product ends in a WhatsApp inquiry with the message already written."
+  - src: panel.png
+    after: decisions
+    alt:
+      es: "Panel del comerciante en computadora, en modo simulación: 12 productos, buscador y botón para agregar productos."
+      en: "Merchant panel on desktop, in simulation mode: 12 products, a search box and an add product button."
+    caption:
+      es: "Panel en modo simulación: los cambios quedan solo en ese navegador."
+      en: "Panel in simulation mode: changes stay in that browser only."
+links:
+  - kind: demo
+    url: https://solucioncomercial.vercel.app/
+stack: [React, Vite, Supabase, Vercel, NFC]
+facts:
+  - value: { es: "1", en: "1" }
+    label: { es: "Base de código para todos los comercios", en: "Codebase for every store" }
+  - value: { es: "0", en: "0" }
+    label: { es: "Carritos y pagos, a propósito", en: "Carts or payments, on purpose" }
+  - value: { es: "Celular", en: "Phone" }
+    label: { es: "Desde donde se edita el catálogo", en: "Where the catalog is edited" }
+
+es:
+  title: Catálogos web para comercios
+  kicker: Servicio para comercios
+  summary: "Un catálogo propio para comercios de indumentaria, pensado para que cada visita termine en una consulta por WhatsApp."
+  role: "Desarrollo del producto y propuestas comerciales para comercios."
+  context: "Un servicio pensado para comercios de indumentaria de Once y Flores, que se complementa con tarjetas NFC para sumar reseñas en Google."
+  problem: "Un comercio necesita mostrar su catálogo actualizado y recibir consultas sin montar ni mantener un e-commerce completo."
+  goals:
+    - "Que cada visita pueda terminar en una consulta por WhatsApp con el producto ya identificado."
+    - "Que el comerciante cambie precios y fotos desde el celular, sin depender de nadie."
+    - "Poder sumar comercios nuevos sin reescribir el sitio."
+  process:
+    - "Una demo completa con marca, productos y precios ficticios para mostrarles a los comercios."
+    - "Un panel para el comerciante con usuarios y reglas de seguridad en Supabase."
+    - "Varios comercios con una sola base de código: cada uno es una carpeta."
+    - "Un segundo comercio ficticio para probar que los datos de dos clientes nunca se mezclen."
+    - "Guías simples para el comerciante y para dar de alta un cliente nuevo."
+  decisions:
+    - title: "Sin carrito, a propósito"
+      body: "No hay checkout, pagos ni registro de compradores. Cada producto tiene un botón que abre WhatsApp con nombre, código y precio."
+    - title: "La seguridad vive en la base de datos"
+      body: "Qué comercio puede ver y editar qué datos lo deciden las reglas de Supabase, no la web."
+    - title: "Un error de tipeo no publica la web equivocada"
+      body: "Si la configuración de un comercio está mal escrita, la compilación falla en lugar de publicar el sitio de otro cliente."
+    - title: "Solo información verdadera"
+      body: "La plantilla pide no inventar envíos, descuentos, reseñas ni certificaciones en la web de un comercio."
+  challenges:
+    - title: "Que un comercio nunca vea datos de otro"
+      body: "Reglas por comercio en la base, pruebas de seguridad automáticas y una verificación de que cada web compilada contiene solo su carpeta."
+    - title: "Un panel usable desde el celular"
+      body: "Cambiar precios, subir fotos y mostrar u ocultar productos con botones grandes y textos simples."
+    - title: "SEO por comercio con una sola base"
+      body: "Título, descripción, imagen para redes, sitemap y datos estructurados se generan desde la configuración de cada comercio."
+  solution: "Una plantilla de catálogo hecha con React y Vite que se publica en Vercel, un panel para el comerciante con Supabase y una guía para sumar cada comercio nuevo con su propio dominio."
+  results:
+    - "Demo online con marca ficticia, para mostrarles el producto a los comercios."
+    - "Panel del comerciante funcionando, en modo simulación y con Supabase."
+    - "Pruebas automáticas de seguridad, de aislamiento entre comercios y de compilación."
+    - "Todavía sin comercios publicados."
+  learnings:
+    - "Separar datos y diseño desde el principio hace que sumar un cliente sea copiar una carpeta, no rehacer el sitio."
+  next:
+    - "Publicar el primer comercio real con su dominio."
+    - "Sumar las tarjetas NFC de reseñas a la propuesta para cada comercio."
+
+en:
+  title: Web catalogs for retailers
+  kicker: Service for retailers
+  summary: "A catalog of their own for clothing stores, designed so every visit can end in a WhatsApp inquiry."
+  role: "Product development and sales proposals for stores."
+  context: "A service designed for clothing stores in Buenos Aires’ Once and Flores neighborhoods, paired with NFC cards that help them collect Google reviews."
+  problem: "A store needs to show an up-to-date catalog and receive inquiries without building or maintaining a full e-commerce site."
+  goals:
+    - "Every visit can end in a WhatsApp inquiry with the product already identified."
+    - "Store owners change prices and photos from their phone, without depending on anyone."
+    - "New stores can be added without rewriting the site."
+  process:
+    - "A complete demo with a fictional brand, products and prices to show stores."
+    - "A merchant panel with user accounts and security rules in Supabase."
+    - "Multiple stores on one codebase: each store is a folder."
+    - "A second fictional store to test that two clients’ data never mix."
+    - "Simple guides for store owners and for onboarding a new client."
+  decisions:
+    - title: "No cart, on purpose"
+      body: "No checkout, payments or shopper accounts. Every product has a button that opens WhatsApp with its name, code and price."
+    - title: "Security lives in the database"
+      body: "Which store can see and edit which data is decided by Supabase rules, not by the website."
+    - title: "A typo never publishes the wrong site"
+      body: "If a store’s configuration is misspelled, the build fails instead of publishing another client’s site."
+    - title: "Only true information"
+      body: "The template asks for no invented shipping, discounts, reviews or certifications on a store’s site."
+  challenges:
+    - title: "One store never sees another’s data"
+      body: "Per-store database rules, automated security tests and a check that each built site contains only its own folder."
+    - title: "A panel that works on a phone"
+      body: "Changing prices, uploading photos and showing or hiding products with large buttons and plain language."
+    - title: "Per-store SEO on one codebase"
+      body: "Title, description, social image, sitemap and structured data are generated from each store’s configuration."
+  solution: "A catalog template built with React and Vite and deployed on Vercel, a merchant panel backed by Supabase, and a guide for onboarding each new store with its own domain."
+  results:
+    - "Live demo with a fictional brand, used to show the product to stores."
+    - "Working merchant panel, in simulation mode and with Supabase."
+    - "Automated tests for security, isolation between stores and builds."
+    - "No stores published yet."
+  learnings:
+    - "Separating data from design from day one makes adding a client a matter of copying a folder, not rebuilding the site."
+  next:
+    - "Publish the first real store on its own domain."
+    - "Add the NFC review cards to each store’s proposal."

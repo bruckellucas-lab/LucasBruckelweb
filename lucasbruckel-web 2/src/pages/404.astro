@@ -1,0 +1,29 @@
+---
+import Base from '../layouts/Base.astro';
+import { t } from '../i18n/ui';
+---
+<Base lang="es" title={t('es', '404.title')} altPath="/en/">
+  <section class="nf wrap">
+    <p class="t-monument code" aria-hidden="true">404</p>
+    <div class="grid body">
+      <div class="col" lang="es-AR">
+        <h1 class="t-h2">{t('es', '404.title')}</h1>
+        <p class="muted">{t('es', '404.body')}</p>
+        <a class="btn btn--solid" href="/">{t('es', '404.home')}</a>
+      </div>
+      <div class="col" lang="en">
+        <h2 class="t-h2">{t('en', '404.title')}</h2>
+        <p class="muted">{t('en', '404.body')}</p>
+        <a class="btn" href="/en/">{t('en', '404.home')}</a>
+      </div>
+    </div>
+  </section>
+</Base>
+<style>
+  .nf { min-height: 100svh; padding-top: clamp(120px, 16vh, 180px); padding-bottom: var(--s-9); }
+  .code { font-size: clamp(10rem, 48vw, 46rem); line-height: 0.75; margin-left: -0.05em; }
+  .body { margin-top: var(--s-8); row-gap: var(--s-8); }
+  .col { grid-column: span 5; display: grid; gap: var(--s-4); justify-items: start; }
+  .col .btn { margin-top: var(--s-4); }
+  @media (max-width: 860px) { .col { grid-column: 1 / -1; } }
+</style>

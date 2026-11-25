@@ -1,0 +1,50 @@
+# Capacidades: solo las que tienen un proyecto o una experiencia que las respalde.
+- id: producto
+  order: 1
+  name: { es: "Desarrollo de productos digitales", en: "Digital product development" }
+  evidence:
+    es: "LISTO, online en beta cerrada, y la plantilla de catálogos que sirve a varios comercios con una sola base de código."
+    en: "LISTO, live in private beta, and the catalog template that serves multiple stores from one codebase."
+  tools: [JavaScript, React, Vite, Supabase, Vercel]
+- id: ia
+  order: 2
+  name: { es: "Inteligencia artificial", en: "Artificial intelligence" }
+  evidence:
+    es: "Desarrollo mis proyectos con asistentes de IA y reviso cada cambio con pruebas automáticas: LISTO tiene 350."
+    en: "I build my projects with AI assistants and check every change with automated tests: LISTO has 350."
+  tools: [Claude, Codex]
+- id: automatizacion
+  order: 3
+  name: { es: "Automatización de procesos", en: "Process automation" }
+  evidence:
+    es: "Pruebas que corren solas en cada cambio, avisos internos por email cuando entra un pedido en LISTO y scripts para cargar el catálogo de un comercio."
+    en: "Tests that run on every change, internal email alerts when a LISTO request comes in, and scripts to load a store’s catalog."
+  tools: [GitHub Actions, Resend, Node.js]
+- id: estrategia
+  order: 4
+  name: { es: "Estrategia de negocios", en: "Business strategy" }
+  evidence:
+    es: "La hoja de ruta de LISTO de la beta al lanzamiento, con el modelo de comisión a validar, y mi formación en Gestión en ORT, que incluyó ORT in Company."
+    en: "LISTO’s roadmap from beta to launch, including the commission model to validate, and my Management studies at ORT, which included ORT in Company."
+  tools: [Excel, Power BI]
+- id: ventas
+  order: 5
+  name: { es: "Marketing y ventas", en: "Marketing and sales" }
+  evidence:
+    es: "Propuestas comerciales para comercios y SEO configurable para la web de cada uno."
+    en: "Sales proposals for stores and configurable SEO for each store’s site."
+  tools: [SEO, Canva]
+- id: diseno
+  order: 6
+  name: { es: "Diseño y experiencia de usuario", en: "Design and user experience" }
+  evidence:
+    es: "El flujo de tres pasos de LISTO (decilo, ajustalo, elegí) y un panel para comerciantes pensado para usarse desde el celular."
+    en: "LISTO’s three-step flow (say it, adjust it, pick one) and a merchant panel designed for phones."
+  tools: [Canva]
+- id: gestion
+  order: 7
+  name: { es: "Gestión de proyectos", en: "Project management" }
+  evidence:
+    es: "Etapas, prioridades y estados en la hoja de ruta de LISTO, y planificación semanal de actividades y de 5 campamentos por año como líder educativo."
+    en: "Phases, priorities and status tracking in LISTO’s roadmap, plus weekly activity planning and 5 camps a year as a youth leader."
+  tools: [Excel]

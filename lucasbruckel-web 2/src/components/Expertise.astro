@@ -1,0 +1,43 @@
+---
+import type { Lang } from '../config/site';
+import { t } from '../i18n/ui';
+import { getExpertise } from '../lib/content';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const items = await getExpertise();
+---
+<section class="expertise section wrap" aria-labelledby="exp-title">
+  <div class="head" data-reveal>
+    <h2 id="exp-title" class="t-display">{t(lang, 'expertise.title')}</h2>
+    <p class="t-lead muted">{t(lang, 'expertise.intro')}</p>
+  </div>
+  <div class="table" role="list">
+    {items.map((i) => (
+      <div class="row" role="listitem" data-reveal>
+        <h3 class="t-h3">{i.data.name[lang]}</h3>
+        <p class="evidence"><span class="visually-hidden">{t(lang, 'expertise.evidence')}: </span>{i.data.evidence[lang]}</p>
+        <p class="tools t-caption"><span class="visually-hidden">{t(lang, 'expertise.tools')}: </span>{i.data.tools.join(', ')}</p>
+      </div>
+    ))}
+  </div>
+</section>
+<style>
+  .head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: var(--s-5); margin-bottom: var(--s-8); }
+  .head p { max-width: 24ch; }
+  .table { border-top: 2px solid var(--black); }
+  .row {
+    display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 5fr) minmax(0, 3fr);
+    gap: var(--s-3) var(--gutter); padding: var(--s-6) var(--s-4); margin-inline: calc(var(--s-4) * -1);
+    border-bottom: 1px solid var(--line); align-items: baseline;
+    transition: background-color var(--dur-2) var(--ease-out), color var(--dur-2) var(--ease-out);
+  }
+  .row:hover { background: var(--black); color: var(--white); }
+  .row:hover .tools { color: var(--muted-dark); }
+  .evidence { max-width: 46ch; }
+  .tools { color: var(--muted); text-align: right; }
+  @media (max-width: 860px) {
+    .row { grid-template-columns: 1fr; }
+    .tools { text-align: left; }
+  }
+</style>

@@ -1,0 +1,11 @@
+---
+import WritingPost from '../../../components/WritingPost.astro';
+import { getWriting, postSlug } from '../../../lib/content';
+
+export async function getStaticPaths() {
+  const posts = await getWriting('en');
+  return posts.map((post) => ({ params: { slug: postSlug(post.id) }, props: { post } }));
+}
+const { post } = Astro.props;
+---
+<WritingPost lang="en" post={post} />
